@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Endpoint Rejector",
+  "version": "1.0",
+  "description": "Reject specific API endpoints with custom HTTP error codes",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": ["https://www.nordnet-local.se:8081/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.nordnet-local.se:8081/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ]
+}

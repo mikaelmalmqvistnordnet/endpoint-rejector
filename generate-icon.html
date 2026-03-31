@@ -1,0 +1,20 @@
+<!-- Open this file in a browser, right-click the canvas, and save as icon.png -->
+<canvas id="c" width="128" height="128"></canvas>
+<script>
+  const c = document.getElementById('c').getContext('2d');
+  // Background
+  c.fillStyle = '#ef4444';
+  c.beginPath();
+  c.roundRect(0, 0, 128, 128, 24);
+  c.fill();
+  // X mark
+  c.strokeStyle = 'white';
+  c.lineWidth = 16;
+  c.lineCap = 'round';
+  c.beginPath();
+  c.moveTo(36, 36);
+  c.lineTo(92, 92);
+  c.moveTo(92, 36);
+  c.lineTo(36, 92);
+  c.stroke();
+</script>
