@@ -51,6 +51,7 @@ function renderRules(rules) {
         <div class="rule-pattern">${escapeHtml(rule.pattern)}</div>
       </div>
       <span class="rule-status ${rule.statusCode >= 500 ? 'status-5xx' : 'status-4xx'}">${rule.statusCode}</span>
+      <button class="btn-edit" data-index="${i}" title="Edit rule">&#9998;</button>
       <button class="btn-delete" data-index="${i}" title="Remove rule">&times;</button>
     </div>
   `
@@ -62,6 +63,34 @@ function renderRules(rules) {
       const rules = await getRules();
       rules[e.target.dataset.index].enabled = e.target.checked;
       await saveRules(rules);
+    });
+  });
+
+  list.querySelectorAll('.btn-edit').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      const index = e.target.dataset.index;
+      const rule = rules[index];
+      const ruleEl = e.target.closest('.rule');
+      const statusOptions = [400, 401, 403, 404, 408, 409, 429, 500, 502, 503, 504];
+      ruleEl.className = 'rule-editing';
+      ruleEl.innerHTML = `
+        <input type="text" class="edit-pattern" value="${escapeHtml(rule.pattern)}" />
+        <select class="edit-status">
+          ${statusOptions.map((s) => `<option value="${s}" ${s === rule.statusCode ? 'selected' : ''}>${s}</option>`).join('')}
+        </select>
+        <button class="btn-save" data-index="${index}">Save</button>
+        <button class="btn-cancel">Cancel</button>
+      `;
+      ruleEl.querySelector('.btn-save').addEventListener('click', async () => {
+        const newPattern = ruleEl.querySelector('.edit-pattern').value.trim();
+        if (!newPattern) return;
+        const allRules = await getRules();
+        allRules[index].pattern = newPattern;
+        allRules[index].statusCode = parseInt(ruleEl.querySelector('.edit-status').value, 10);
+        await saveRules(allRules);
+      });
+      ruleEl.querySelector('.btn-cancel').addEventListener('click', () => renderRules(rules));
+      ruleEl.querySelector('.edit-pattern').focus();
     });
   });
 

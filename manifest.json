@@ -4,14 +4,14 @@
   "version": "1.0",
   "description": "Reject specific API endpoints with custom HTTP error codes",
   "permissions": ["storage", "scripting", "activeTab"],
-  "host_permissions": ["https://www.nordnet-local.se:8081/*"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
   "content_scripts": [
     {
-      "matches": ["https://www.nordnet-local.se:8081/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "run_at": "document_start",
       "world": "MAIN"
