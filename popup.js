@@ -24,7 +24,7 @@ async function syncToPage(rules) {
       args: [rules],
     });
   } catch (e) {
-    console.warn('Could not sync rules to page:', e);
+    // ignore — tab may not be available
   }
 }
 
@@ -126,6 +126,45 @@ document.getElementById('pattern').addEventListener('keydown', (e) => {
 // Clear all
 document.getElementById('clearBtn').addEventListener('click', async () => {
   await saveRules([]);
+});
+
+// Delete all Chrome overrides (DNR dynamic + session rules)
+document.getElementById('nukeBtn').addEventListener('click', async () => {
+  const dynamicRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const sessionRules = await chrome.declarativeNetRequest.getSessionRules();
+
+  const dynamicIds = dynamicRules.map((r) => r.id);
+  const sessionIds = sessionRules.map((r) => r.id);
+
+  if (dynamicIds.length > 0) {
+    await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: dynamicIds });
+  }
+  if (sessionIds.length > 0) {
+    await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: sessionIds });
+  }
+
+  await saveRules([]);
+
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab?.id) {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => location.reload(),
+    });
+  }
+
+  const btn = document.getElementById('nukeBtn');
+  const removed = dynamicIds.length + sessionIds.length;
+  btn.textContent = `Cleared ${removed} override${removed !== 1 ? 's' : ''} + all rules`;
+  setTimeout(() => (btn.textContent = 'Delete all Chrome overrides'), 1500);
+});
+
+// Reload active tab
+document.getElementById('reloadBtn').addEventListener('click', async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab?.id) {
+    await chrome.tabs.reload(tab.id);
+  }
 });
 
 // Copy rules as JSON

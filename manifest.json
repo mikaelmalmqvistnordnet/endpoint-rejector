@@ -3,7 +3,7 @@
   "name": "Endpoint Rejector",
   "version": "1.0",
   "description": "Reject specific API endpoints with custom HTTP error codes",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": ["storage", "scripting", "activeTab", "declarativeNetRequest"],
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html",

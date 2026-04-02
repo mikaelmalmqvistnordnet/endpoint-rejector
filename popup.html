@@ -195,6 +195,16 @@
       padding: 4px 8px;
     }
     .btn-export:hover { background: #f3f4f6; }
+    .btn-nuke {
+      background: none;
+      color: #ef4444;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-top: 1px solid #e5e7eb;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-nuke:hover { background: #fef2f2; }
   </style>
 </head>
 <body>
@@ -235,7 +245,11 @@
 
   <div class="actions">
     <button class="btn-export" id="exportBtn">Copy rules</button>
+    <button class="btn-add" id="reloadBtn">Reload page</button>
     <button class="btn-clear" id="clearBtn">Clear all</button>
+  </div>
+  <div class="actions" style="border-top: none; padding-top: 0;">
+    <button class="btn-nuke" id="nukeBtn" title="Clears this extension's rules and network overrides. DevTools Local Overrides must be cleared manually via DevTools &gt; Sources &gt; Overrides.">Delete all Chrome overrides</button>
   </div>
 
   <script src="popup.js"></script>
