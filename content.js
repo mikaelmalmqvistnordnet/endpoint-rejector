@@ -55,7 +55,7 @@
         })
       );
     }
-    return originalFetch.apply(this, arguments);
+    return originalFetch.apply(window, arguments);
   };
 
   // --- Patch XMLHttpRequest ---
@@ -160,5 +160,16 @@
     }
   });
 
-  console.log('[Endpoint Rejector] Active and monitoring requests');
+  const rules = getRules();
+  if (rules.length === 0) {
+    console.log('[Endpoint Rejector] Active and monitoring requests. No endpoints configured.');
+  } else {
+    const ruleLines = rules.map(
+      (r) =>
+        `  ${r.enabled ? '🟢' : '⚪'} ${r.pattern} → ${r.statusCode} ${getStatusText(r.statusCode)} ${r.enabled ? '(active)' : '(inactive)'}`
+    );
+    console.log(
+      `[Endpoint Rejector] Active and monitoring requests.\n\nEndpoints (${rules.length}):\n${ruleLines.join('\n')}`
+    );
+  }
 })();
