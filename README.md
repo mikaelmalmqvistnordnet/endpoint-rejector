@@ -17,6 +17,10 @@ Chrome extension that intercepts fetch/XHR requests matching URL patterns and re
 
 Rules can be toggled, edited, or deleted from the popup. Use **Clear all** to remove everything.
 
+Console output at startup shows you list of all rejected endpoints along with their status 👇
+
+<img width="601" height="125" alt="image" src="https://github.com/user-attachments/assets/779f6ad8-bc24-4f4e-9954-5d6abb9fac7e" />
+
 ## Examples
 
 | Pattern | Status | Effect |
